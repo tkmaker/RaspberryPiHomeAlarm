@@ -53,7 +53,7 @@ while True:
               fo1.closed 
               if (trigger_status == "1"):
                 print "Trigger recvd. Sound the alarm!!!"
-                #subprocess.call(["bash","intruder_mail.sh"]) 
+                subprocess.call(["bash","intruder_mail.sh"]) 
                 for i in range(0,20):
                    blink(led)
 
