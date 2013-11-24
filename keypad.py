@@ -94,9 +94,10 @@ if __name__ == '__main__':
 
     #setup a 3 digit code.Each attempt will be called "code"
     code = "000"
-    passcode = "123"    
-   
-    with open("armed.txt", "r+") as fo:
+    passcode = "127"    
+    haltcode = "555"
+
+    with open("/home/pi/trush_workdir/scripts/homealarm/armed.txt", "r+") as fo:
        fo.seek(0, 0)
        fo.write("0")
     fo.closed
@@ -109,6 +110,7 @@ if __name__ == '__main__':
 
     # Loop while waiting for a keypress
     while True:
+     try: 
         digit = None
         while digit == None:
             digit = kp.getKey()
@@ -122,25 +124,31 @@ if __name__ == '__main__':
 
 
         if (code == passcode):
-
+            print "Passcode match!"
             #Read current status of armed.txt
-            with open("armed.txt", "r+") as fo:
+            with open("/home/pi/trush_workdir/scripts/homealarm/armed.txt", "r+") as fo:
                 fo.seek(0, 0)
                 status = fo.read(1)
             fo.closed
             #If system was already armed - disam it
             if (status == "1"):
-                with open("armed.txt", "r+") as fo:
+                with open("/home/pi/trush_workdir/scripts/homealarm/armed.txt", "r+") as fo:
                     fo.seek(0, 0)
                     fo.write("0")
                 fo.closed
             #Else system was not armed - arm it now 
             else:
-                with open("armed.txt", "r+") as fo:
+                with open("/home/pi/trush_workdir/scripts/homealarm/armed.txt", "r+") as fo:
                     fo.seek(0, 0)
                     fo.write("1")
                 fo.closed
         
+        elif (code == haltcode):
+            subprocess.call(["sudo","shutdown","-h","now"])
         time.sleep(0.5)
+    
+     except KeyboardInterrupt:
+        print "Program ended by user\n"
+        break
 
 

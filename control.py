@@ -7,13 +7,13 @@ import time
 # Retrieve GPIO lib
 GPIO = webiopi.GPIO
 
-os.system("sudo echo -n 0 > armed.txt")
+os.system("sudo echo -n 0 > /home/pi/trush_workdir/scripts/homealarm/armed.txt")
 
 def arm():
-  os.system("sudo echo -n 1 > armed.txt")
+  os.system("sudo echo -n 1 > /home/pi/trush_workdir/scripts/homealarm/armed.txt")
 
 def disarm():
-  os.system("sudo echo -n 0 > armed.txt")
+  os.system("sudo echo -n 0 > /home/pi/trush_workdir/scripts/homealarm/armed.txt")
 
 # Instantiate the server on the port 8085, it starts immediately in its own thread
 server = webiopi.Server(port=8085, login="tk", password="tk")
