@@ -94,7 +94,7 @@ if __name__ == '__main__':
 
     #setup a 3 digit code.Each attempt will be called "code"
     code = "000"
-    passcode = "127"    
+    passcode = "123"    
     haltcode = "555"
 
     with open("/home/pi/trush_workdir/scripts/homealarm/armed.txt", "r+") as fo:

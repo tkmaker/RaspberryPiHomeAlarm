@@ -3,6 +3,7 @@ import webiopi
 import sys,os
 import subprocess
 import time 
+import signal
 
 # Retrieve GPIO lib
 GPIO = webiopi.GPIO
@@ -22,14 +23,14 @@ server.addMacro(arm)
 server.addMacro(disarm)
 
 #start keypad.py and alarm.py process
-p0 = subprocess.Popen(["sudo","python","keypad.py"])
-p1 = subprocess.Popen(["sudo","python","alarm.py"])
+p0 = subprocess.Popen(["sudo","python","keypad.py"],preexec_fn=os.setsid)
+p1 = subprocess.Popen(["sudo","python","alarm.py"],preexec_fn=os.setsid)
 
 # Run our loop until CTRL-C is pressed or SIGTERM received
 webiopi.runLoop()
 
-p0.kill
-p1.kill
+os.killpg(p0.pid,signal.SIGTERM)
+os.killpg(p1.pid,signal.SIGTERM)
 
 # Stop the server
 server.stop()

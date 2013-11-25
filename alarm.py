@@ -3,6 +3,7 @@ import webiopi
 import sys,os
 import subprocess
 import time 
+import signal
 
 import RPi.GPIO as GPIO
 
@@ -27,6 +28,11 @@ def blink(pin):
         time.sleep(1)
         return
 
+def kill_child_process():
+          print "Killing RFSniffer process pid %s"%p0.pid
+          os.killpg(p0.pid,signal.SIGTERM)
+          print "Killing Motion process  pid %s"%p1.pid
+          os.killpg(p1.pid,signal.SIGTERM)
 
 while True:
       try:
@@ -41,9 +47,8 @@ while True:
            #if armed, start RF sniffer process if not already started. Check for trigger to sound alarm.
            if (armed_status == "1"):
               if (proc_start == 0):
-                p = subprocess.Popen(["sudo","/home/pi/trush_workdir/rf_xmit/433Utils/RPi_utils/RFSniffer"]
-                )
-                p1 = subprocess.Popen(["sudo","motion","-n"])
+                p0 = subprocess.Popen(["sudo","/home/pi/trush_workdir/rf_xmit/433Utils/RPi_utils/RFSniffer"],preexec_fn=os.setsid)
+                p1 = subprocess.Popen(["sudo","motion","-n"],preexec_fn=os.setsid)
                 proc_start = 1
               time.sleep(1)
              
@@ -61,17 +66,14 @@ while True:
            elif (armed_status == "0"): 
                os.system("sudo echo -n 0 > /home/pi/trush_workdir/scripts/homealarm/trigger.txt")
                if (proc_start == 1):
-                    p.kill()
-                    p1.kill()
+                    kill_child_process()
                     proc_start = 0
 
       except KeyboardInterrupt:
         print "Program ended by user\n"
-        p.kill()
-        p1.kill()
+        kill_child_process()
         break
          
-p.kill()
 GPIO.cleanup()
 
 
