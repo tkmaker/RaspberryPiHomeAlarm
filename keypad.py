@@ -14,7 +14,8 @@
 import RPi.GPIO as GPIO
 import time
 import subprocess
- 
+from config import config
+
 class keypad():
     # CONSTANTS   
     KEYPAD = [
@@ -25,7 +26,7 @@ class keypad():
     ]
      
     ROW         = [18,23,24,25]
-    COLUMN      = [4,17,22]
+    COLUMN      = [4,22,10]
      
     def __init__(self):
         GPIO.setmode(GPIO.BCM)
@@ -94,7 +95,7 @@ if __name__ == '__main__':
 
     #setup a 3 digit code.Each attempt will be called "code"
     code = "000"
-    passcode = "123"    
+    passcode = config['keypad_code']
     haltcode = "555"
 
     with open("/home/pi/trush_workdir/scripts/homealarm/armed.txt", "r+") as fo:
@@ -138,6 +139,8 @@ if __name__ == '__main__':
                 fo.closed
             #Else system was not armed - arm it now 
             else:
+                #Allow some delay to leave home - 1 min here
+                time.sleep(60)
                 with open("/home/pi/trush_workdir/scripts/homealarm/armed.txt", "r+") as fo:
                     fo.seek(0, 0)
                     fo.write("1")

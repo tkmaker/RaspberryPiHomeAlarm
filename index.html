@@ -10,17 +10,20 @@
 		var button;
 			
 		
-		button = webiopi().createButton("bt_arm", "Arm", arm);
+		button = webiopi().createButton("bt_arm", "System Arm", arm);
 		$("#middle").append(button);
 		
-		button = webiopi().createButton("bt_disarm", "Disarm", disarm);
+		button = webiopi().createButton("bt_disarm", "System Disarm", disarm);
 		$("#middle").append(button);
 		
-                button = webiopi().createButton("bt_l0lighton", "Light 0 - On", l0_on);
-		$("#middle").append(button);
+                button = webiopi().createButton("bt_sw1", "Switch 1 On/Off",sw1_toggle);
+                $("#middle").append(button);
+ 
+                button = webiopi().createButton("bt_sw2", "Switch 2 On/Off", sw2_toggle);
+                $("#middle").append(button);
 
-		button = webiopi().createButton("bt_l0lightoff", "Light 0 - Off", l0_off);
-		$("#middle").append(button);
+                button = webiopi().createButton("bt_sw3", "Switch 3 On/Off",sw3_toggle);
+                $("#middle").append(button);
 
 	}
 	
@@ -33,21 +36,25 @@
 		webiopi().callMacro("disarm");
 	}
 	
-        function l0_on() {
-		webiopi().callMacro("l0_on");
+        function sw2_toggle() {
+		webiopi().callMacro("sw2_toggle");
 	}
 
-	function l0_off() {
-		webiopi().callMacro("l0_off");
+	function sw1_toggle() {
+		webiopi().callMacro("sw1_toggle");
 	}
 
-	webiopi().ready(init);
+        function sw3_toggle() {
+                webiopi().callMacro("sw3_toggle");
+        }
+
+      webiopi().ready(init);
 		
 	</script>
 	<style type="text/css">
 		button {
 			margin: 15px 15px 15px 15px;
-			width: 150px;
+			width: 250px;
 			height: 50px;
 			font-size: 14pt;
 			font-weight: bold;
@@ -60,12 +67,12 @@
 </head>
 <body>
 	<div id="content" align="center">
-         Home Alarm System Interface
+         Home Automation System Interface
 	<div id="middle"></div>
         </div>
         
-        <p> <w> Webcam-1  Webcam-2 </p></w>
-        <img width="320" height="240" src="http://192.168.1.76:8082/?action=stream" align="left">
-         <img width="320" height="240" src="http://192.168.1.76:8081/?action=stream" align="center"><br/>
+
+        <p> <w> Webcam-1 </p></w>
+         <img width="320" height="240" src="http://192.168.1.76:8081/?action=stream" align="left"><br/>
 </body>
 </html>
